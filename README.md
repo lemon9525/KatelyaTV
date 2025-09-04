@@ -43,6 +43,7 @@
 - **☁️ 多平台支持**：Vercel、Cloudflare Pages、传统服务器全兼容
 - **🔧 灵活配置**：支持自定义资源站、代理设置、主题配置
 - **📱 PWA 支持**：可安装为桌面/手机应用，离线缓存
+- **📺 TVBox 兼容**：支持 TVBox 配置接口，可导入到各种电视盒子应用
 
 ### 🎨 用户体验
 
@@ -62,6 +63,33 @@
 | 状态管理  | React Hooks · Context API                                                                             |
 | 代码质量  | ESLint · Prettier · Jest · Husky                                                                      |
 | 部署      | Docker · Vercel · CloudFlare pages                                                                    |
+
+## 📺 TVBox 兼容功能
+
+KatelyaTV 新增了 TVBox 配置接口，可以将您的视频源导入到各种电视盒子应用中使用：
+
+### ✨ 功能特点
+
+- **🔄 自动同步**：自动同步 KatelyaTV 中配置的所有视频源
+- **📋 标准格式**：支持 TVBox 标准 JSON 配置格式
+- **🎬 内置解析**：集成多个视频解析接口，支持主流视频平台
+- **🌐 跨域支持**：自动处理 CORS 跨域问题
+- **📱 多格式**：支持 JSON 和 Base64 两种配置格式
+
+### 🚀 快速使用
+
+1. **访问配置页面**：在 KatelyaTV 中点击侧边栏的"TVBox 配置"或访问 `/config` 页面
+2. **选择格式类型**：在页面中选择 JSON 或 Base64 格式
+3. **复制配置链接**：点击复制按钮获取配置链接
+4. **导入到 TVBox**：在 TVBox 应用中导入配置链接
+
+### 🔗 API 端点
+
+- **JSON 配置**：`https://your-domain.com/api/tvbox?format=json`
+- **Base64 配置**：`https://your-domain.com/api/tvbox?format=base64`
+- **视频解析**：`https://your-domain.com/api/parse?url={视频地址}`
+
+> 📖 详细使用说明请查看：[TVBox 配置指南](docs/TVBOX.md)
 
 ## 🚀 部署教程
 
@@ -130,6 +158,8 @@ docker run -d \
 为了方便用户快速上手，我们提供了一个经过测试的资源站配置文件：
 
 **配置文件下载地址**: [https://www.mediafire.com/file/xl3yo7la2ci378w/config.json/file](https://www.mediafire.com/file/xl3yo7la2ci378w/config.json/file)
+
+**配置文件 Plus 下载地址**: [配置文件 Plus 版本【94 片源】](https://www.mediafire.com/file/fbpk1mlupxp3u3v/configplus.json/file)
 
 ##### 📋 配置步骤
 
@@ -280,6 +310,9 @@ docker compose ps
 ##### 方法一：使用推荐配置文件（推荐）
 
 1. **下载配置文件**：[点击下载 config.json](https://www.mediafire.com/file/xl3yo7la2ci378w/config.json/file)
+
+   **配置文件 Plus 下载地址**: [配置文件 Plus 版本【94 片源】](https://www.mediafire.com/file/fbpk1mlupxp3u3v/configplus.json/file)
+
 2. **修改 docker-compose.yml**：取消注释 volumes 部分
    ```yaml
    # 将这两行的注释去掉
@@ -363,6 +396,8 @@ curl -O https://raw.githubusercontent.com/katelya77/KatelyaTV/main/.env.kvrocks.
 cp .env.kvrocks.example .env
 ```
 
+> **📌 重要说明**：此配置使用预构建的 Docker 镜像 (`ghcr.io/katelya77/katelyatv:latest`)，无需下载源代码。镜像会自动从 GitHub Container Registry 拉取。
+
 #### 第二步：配置环境变量
 
 ```bash
@@ -375,6 +410,9 @@ nano .env
 ```bash
 # 存储类型：使用 Kvrocks
 NEXT_PUBLIC_STORAGE_TYPE=kvrocks
+
+# 站点全局访问密码 (必填)
+PASSWORD=your_site_access_password
 
 # Kvrocks 连接配置
 KVROCKS_URL=redis://kvrocks:6666
@@ -405,6 +443,21 @@ docker compose -f docker-compose.kvrocks.yml exec kvrocks redis-cli -h localhost
 # 查看日志
 docker compose -f docker-compose.kvrocks.yml logs -f
 ```
+
+### 🔧 高级选项：本地构建
+
+如果你想要从源代码本地构建而不是使用预构建镜像，可以：
+
+```bash
+# 克隆完整源代码
+git clone https://github.com/katelya77/KatelyaTV.git
+cd KatelyaTV
+
+# 使用本地构建版本的配置
+docker compose -f docker-compose.kvrocks.local.yml up -d
+```
+
+> **注意**：本地构建需要下载完整源代码，首次构建时间较长，但可以自定义修改代码。
 
 #### 第五步：访问应用
 
@@ -521,6 +574,9 @@ docker compose -f docker-compose.kvrocks.yml up -d
 #### 方法一：使用推荐配置（推荐）
 
 1. **下载配置文件**：[点击下载 config.json](https://www.mediafire.com/file/xl3yo7la2ci378w/config.json/file)
+
+   **配置文件 Plus 下载地址**: [配置文件 Plus 版本【94 片源】](https://www.mediafire.com/file/fbpk1mlupxp3u3v/configplus.json/file)
+
 2. **替换仓库配置**：
    - 在你 Fork 的仓库中找到 `config.json` 文件
    - 点击编辑按钮（铅笔图标）
@@ -601,6 +657,9 @@ docker compose -f docker-compose.kvrocks.yml up -d
 ##### 推荐配置方法：
 
 1. **下载配置文件**：[点击下载 config.json](https://www.mediafire.com/file/xl3yo7la2ci378w/config.json/file)
+
+   **配置文件 Plus 下载地址**: [配置文件 Plus 版本【94 片源】](https://www.mediafire.com/file/fbpk1mlupxp3u3v/configplus.json/file)
+
 2. **更新仓库配置**：
    - 回到你的 GitHub 仓库
    - 找到 `config.json` 文件，点击编辑
@@ -1342,6 +1401,8 @@ KatelyaTV 支持标准的苹果 CMS V10 API 格式。
 我们为用户精心准备了一个经过测试和优化的配置文件：
 
 **📂 配置文件下载链接**: [https://www.mediafire.com/file/xl3yo7la2ci378w/config.json/file](https://www.mediafire.com/file/xl3yo7la2ci378w/config.json/file)
+
+**📂 配置文件 Plus 下载地址**: [配置文件 Plus 版本【94 片源】](https://www.mediafire.com/file/fbpk1mlupxp3u3v/configplus.json/file)
 
 ### ✨ 配置文件特点
 
