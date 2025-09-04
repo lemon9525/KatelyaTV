@@ -9,6 +9,7 @@
   <p>
     <a href="#部署">🚀 部署</a> ·
     <a href="#功能特性">✨ 功能</a> ·
+    <a href="#方案四vercel-部署免服务器支持多用户">☁️ Vercel+Upstash</a> ·
     <a href="#docker">🐳 Docker</a> ·
     <a href="#环境变量">⚙️ 配置</a>
   </p>
@@ -40,7 +41,7 @@
 ### 🚀 部署与扩展
 
 - **🐳 Docker 一键部署**：提供完整的 Docker 镜像，开箱即用
-- **☁️ 多平台支持**：Vercel、Cloudflare Pages、传统服务器全兼容
+- **☁️ 多平台支持**：Vercel + Upstash、Docker + Redis、Cloudflare Pages + D1、传统服务器全兼容
 - **🔧 灵活配置**：支持自定义资源站、代理设置、主题配置
 - **📱 PWA 支持**：可安装为桌面/手机应用，离线缓存
 - **📺 TVBox 兼容**：支持 TVBox 配置接口，可导入到各种电视盒子应用
@@ -62,7 +63,7 @@
 | 播放器    | [ArtPlayer](https://github.com/zhw2590582/ArtPlayer) · [HLS.js](https://github.com/video-dev/hls.js/) |
 | 状态管理  | React Hooks · Context API                                                                             |
 | 代码质量  | ESLint · Prettier · Jest · Husky                                                                      |
-| 部署      | Docker · Vercel · CloudFlare pages                                                                    |
+| 部署      | Docker · Vercel · CloudFlare pages · Upstash                                                          |
 
 ## 📺 TVBox 兼容功能
 
@@ -95,19 +96,20 @@ KatelyaTV 新增了 TVBox 配置接口，可以将您的视频源导入到各种
 
 > **💡 推荐方案**：
 >
-> - 🆕 **个人用户**：优先选择 **Docker 单容器**（最简单）
-> - 🏠 **家庭/团队**：选择 **Docker + Redis**（功能完整）
+> - 🆕 **个人用户**：优先选择 **Vercel + Upstash**（免费 + 多用户 + 同步）
+> - 🏠 **进阶用户**：选择 **Docker + Redis**（自托管 + 功能完整）
 > - 🏢 **生产环境**：强烈推荐 **Docker + Kvrocks**（极高可靠性，零数据丢失风险）
 
 ### 📋 部署方式对比
 
-| 方式                    | 难度   | 成本     | 多用户 | 数据可靠性 | 推荐场景            |
-| ----------------------- | ------ | -------- | ------ | ---------- | ------------------- |
-| 🐳 **Docker 单容器**    | ⭐     | 需服务器 | ❌     | ⭐⭐       | 个人使用，最简单    |
-| 🐳 **Docker + Redis**   | ⭐⭐   | 需服务器 | ✅     | ⭐⭐⭐     | 家庭/团队，功能完整 |
-| 🏪 **Docker + Kvrocks** | ⭐⭐   | 需服务器 | ✅     | ⭐⭐⭐⭐⭐ | 生产环境，高可靠性  |
-| ☁️ **Vercel**           | ⭐     | 免费     | ❌     | ⭐         | 临时体验，无服务器  |
-| 🌐 **Cloudflare**       | ⭐⭐⭐ | 免费     | ✅     | ⭐⭐⭐     | 技术爱好者          |
+| 方式                    | 难度   | 成本     | 多用户 | 数据可靠性 | 推荐场景                    |
+| ----------------------- | ------ | -------- | ------ | ---------- | --------------------------- |
+| 🐳 **Docker 单容器**    | ⭐     | 需服务器 | ❌     | ⭐⭐       | 个人使用，最简单            |
+| 🐳 **Docker + Redis**   | ⭐⭐   | 需服务器 | ✅     | ⭐⭐⭐     | 家庭/团队，功能完整         |
+| 🏪 **Docker + Kvrocks** | ⭐⭐   | 需服务器 | ✅     | ⭐⭐⭐⭐⭐ | 生产环境，高可靠性          |
+| ☁️ **Vercel（单机版）** | ⭐     | 免费     | ❌     | ⭐         | 临时体验，无服务器          |
+| ☁️ **Vercel + Upstash** | ⭐⭐   | 免费     | ✅     | ⭐⭐⭐⭐   | **推荐**：无服务器 + 多用户 |
+| 🌐 **Cloudflare + D1**  | ⭐⭐⭐ | 免费     | ✅     | ⭐⭐⭐     | 技术爱好者                  |
 
 ---
 
@@ -529,9 +531,9 @@ docker compose -f docker-compose.kvrocks.yml up -d
 
 ---
 
-## �🎯 方案四：Vercel 部署（免服务器）
+## 🎯 方案四：Vercel 部署（免服务器，支持多用户）
 
-> **适合场景**：没有服务器，想要快速体验，个人使用
+> **适合场景**：没有服务器，想要快速体验，支持多用户和跨设备同步
 
 ### 🔧 前置要求
 
@@ -573,16 +575,32 @@ docker compose -f docker-compose.kvrocks.yml up -d
 
 #### 方法一：使用推荐配置（推荐）
 
-1. **下载配置文件**：[点击下载 config.json](https://www.mediafire.com/file/xl3yo7la2ci378w/config.json/file)
+**第一步：下载配置文件**
 
-   **配置文件 Plus 下载地址**: [配置文件 Plus 版本【94 片源】](https://www.mediafire.com/file/fbpk1mlupxp3u3v/configplus.json/file)
+选择以下任一配置文件：
 
-2. **替换仓库配置**：
-   - 在你 Fork 的仓库中找到 `config.json` 文件
-   - 点击编辑按钮（铅笔图标）
-   - 将下载的配置内容复制替换原有内容
-   - 点击 **Commit changes**
-3. **等待重新部署**：Vercel 会自动重新部署（约 1-2 分钟）
+- **基础版**: [config.json](https://www.mediafire.com/file/xl3yo7la2ci378w/config.json/file)
+- **Plus 版**: [配置文件 Plus 版本【94 片源】](https://www.mediafire.com/file/fbpk1mlupxp3u3v/configplus.json/file)
+
+**第二步：获取正确的 JSON 内容**
+
+⚠️ **重要**: 请下载文件到本地，不要直接复制网页内容！
+
+1. **下载文件**: 点击 MediaFire 的 "Download" 按钮
+2. **打开文件**: 用记事本打开下载的 `.json` 文件
+3. **复制内容**: 全选并复制文件中的 JSON 内容
+
+**第三步：更新仓库配置**
+
+1. 在你 Fork 的仓库中找到 `config.json` 文件
+2. 点击编辑按钮（✏️ 铅笔图标）
+3. **删除所有原有内容**，粘贴从本地文件复制的完整 JSON 内容
+4. 确保内容格式正确（以 `{` 开头，以 `}` 结尾）
+5. 点击 **Commit changes**
+
+**第四步：等待重新部署**
+
+Vercel 会自动重新部署（约 1-2 分钟），部署成功后即可正常使用。
 
 #### 方法二：手动配置
 
@@ -594,11 +612,74 @@ docker compose -f docker-compose.kvrocks.yml up -d
 4. 点击 **Commit changes**
 5. Vercel 会自动重新部署
 
-### ⚠️ 注意事项
+### 🚀 Vercel + Upstash 多用户部署（推荐升级方案）
 
-- Vercel 版本不支持用户注册和账号系统
+如果你需要**多用户支持**和**跨设备数据同步**功能，可以配置 Upstash Redis 数据库：
+
+#### 🔧 配置步骤
+
+**第一步：创建 Upstash Redis 数据库**
+
+1. 访问 [Upstash Console](https://console.upstash.com/)
+2. 使用 GitHub 账号登录（或注册新账号）
+3. 点击 **Create Database**
+4. 配置数据库：
+   - **Name**: 输入数据库名称（如 `katelyatv-db`）
+   - **Region**: 选择离你最近的区域
+   - **Type**: 选择 **Regional**（免费版）
+5. 点击 **Create** 创建数据库
+
+**第二步：获取连接信息**
+
+1. 在数据库详情页面，找到 **REST API** 部分
+2. 复制以下信息：
+   - **UPSTASH_REDIS_REST_URL**: `https://xxx-xxx-xxx.upstash.io`
+   - **UPSTASH_REDIS_REST_TOKEN**: `AXXXXxxxxxxxxxxxxxx`
+
+**第三步：配置 Vercel 环境变量**
+
+1. 在 Vercel 项目仪表板中，进入 **Settings** → **Environment Variables**
+2. 添加以下环境变量：
+
+| Key                           | Value                            | 说明               |
+| ----------------------------- | -------------------------------- | ------------------ |
+| `NEXT_PUBLIC_STORAGE_TYPE`    | `upstash`                        | 启用 Upstash 存储  |
+| `UPSTASH_URL`                 | `https://xxx-xxx-xxx.upstash.io` | Upstash REST URL   |
+| `UPSTASH_TOKEN`               | `AXXXXxxxxxxxxxxxxxx`            | Upstash REST Token |
+| `NEXT_PUBLIC_ENABLE_REGISTER` | `true`                           | 开启用户注册       |
+| `USERNAME`                    | `admin`                          | 管理员用户名       |
+| `PASSWORD`                    | `your_admin_password`            | 管理员密码         |
+
+3. 点击 **Save** 保存配置
+
+**第四步：重新部署**
+
+1. 进入 **Deployments** 页面
+2. 点击最新部署右侧的 **···** 菜单
+3. 选择 **Redeploy** 重新部署
+
+#### ✨ 升级后的功能
+
+配置完成后，你的应用将支持：
+
+- **👥 多用户系统**: 用户可以注册独立账号
+- **🔄 跨设备同步**: 观看记录、收藏夹在所有设备间同步
+- **🛡️ 管理员功能**: 用户管理、系统配置等高级功能
+- **📊 数据持久化**: 数据存储在云端，永不丢失
+
+#### 💰 费用说明
+
+- **Upstash 免费额度**: 每月 10,000 个命令，通常足够个人/家庭使用
+- **Vercel 免费额度**: 包含 100GB 带宽和无限部署
+- **总成本**: 正常使用完全免费！
+
+### ⚠️ 单机版注意事项
+
+如果你选择不配置 Upstash（单机版）：
+
+- 不支持用户注册和账号系统
 - 观看记录保存在浏览器本地，换设备会丢失
-- 如果需要多用户功能，请考虑 Docker + Redis 方案
+- 如果需要多用户功能，强烈推荐配置 Upstash 或考虑 Docker + Redis 方案
 
 ---
 
@@ -654,20 +735,70 @@ docker compose -f docker-compose.kvrocks.yml up -d
 
 > **📢 重要提醒**：为保障项目长期稳定运行，应用户建议已移除内置视频源，需要配置资源站。
 
-##### 推荐配置方法：
+##### 📋 详细配置步骤（重要）：
 
-1. **下载配置文件**：[点击下载 config.json](https://www.mediafire.com/file/xl3yo7la2ci378w/config.json/file)
+**第一步：下载配置文件**
 
-   **配置文件 Plus 下载地址**: [配置文件 Plus 版本【94 片源】](https://www.mediafire.com/file/fbpk1mlupxp3u3v/configplus.json/file)
+选择以下任一配置文件下载：
 
-2. **更新仓库配置**：
-   - 回到你的 GitHub 仓库
-   - 找到 `config.json` 文件，点击编辑
-   - 用下载的内容替换原有配置
-   - 提交更改
-3. **等待自动部署**：Cloudflare Pages 会自动重新构建部署
+- **基础版**: [config.json](https://www.mediafire.com/file/xl3yo7la2ci378w/config.json/file)
+- **Plus 版**: [配置文件 Plus 版本【94 片源】](https://www.mediafire.com/file/fbpk1mlupxp3u3v/configplus.json/file)
 
-🎉 **完成！现在可以正常使用影视聚合功能了**
+**第二步：验证下载的文件内容**
+
+❌ **错误做法**: 直接复制网页上显示的内容  
+✅ **正确做法**: 下载 `.json` 文件到本地，然后打开查看
+
+⚠️ **常见错误**: 如果你直接从 MediaFire 页面复制内容，可能会包含网页元素，导致 JSON 格式错误！
+
+**第三步：获取正确的 JSON 内容**
+
+1. **下载文件**: 点击 MediaFire 的 "Download" 按钮，下载 `.json` 文件到电脑
+2. **打开文件**: 用记事本或代码编辑器打开下载的 `.json` 文件
+3. **复制内容**: 选择全部内容并复制（应该以 `{` 开头，以 `}` 结尾）
+
+**第四步：更新 GitHub 仓库**
+
+1. **进入仓库**: 回到你 Fork 的 GitHub 仓库
+2. **编辑文件**: 找到 `config.json` 文件，点击 **✏️ 编辑** 按钮
+3. **替换内容**:
+   - **删除所有原有内容**
+   - **粘贴从本地文件复制的完整 JSON 内容**
+   - **确保内容以 `{` 开头，以 `}` 结尾**
+4. **验证格式**: 在提交前检查内容是否为有效的 JSON 格式
+5. **提交更改**: 填写提交信息，点击 **Commit changes**
+
+**第五步：等待自动部署**
+
+1. Cloudflare Pages 会自动检测到 GitHub 仓库的更改
+2. 等待 2-3 分钟自动重新构建和部署
+3. 部署成功后即可正常使用影视聚合功能
+
+##### 🔍 故障排除
+
+**如果遇到 "config.json 不是有效的 JSON" 错误：**
+
+1. **检查文件内容**: 确保内容是纯 JSON，没有 HTML 标签或其他字符
+2. **重新下载**: 从 MediaFire 重新下载文件，不要复制网页内容
+3. **使用 JSON 验证器**: 将内容粘贴到 [JSON 验证器](https://jsonlint.com/) 检查格式
+4. **查看构建日志**: 在 Cloudflare Pages 的部署页面查看详细错误信息
+
+**示例正确的 JSON 格式开头：**
+
+```json
+{
+  "cache_time": 7200,
+  "api_site": {
+    "example": {
+      "api": "https://example.com/api.php/provide/vod",
+      "name": "示例资源站"
+    }
+    // ... 更多配置
+  }
+}
+```
+
+🎉 **完成！配置正确后即可正常使用所有影视聚合功能了**
 
 ### 🗄️ 启用 D1 数据库（可选，支持多用户）
 
@@ -1179,8 +1310,8 @@ echo $UPSTASH_TOKEN  # 应该是长字符串令牌
 | ANNOUNCEMENT                | 站点公告                                                    | 任意字符串                       | 本网站仅提供影视信息搜索服务，所有内容均来自第三方网站。本站不存储任何视频资源，不对任何内容的准确性、合法性、完整性负责。 |
 | NEXT_PUBLIC_STORAGE_TYPE    | 播放记录/收藏的存储方式                                     | localstorage、redis、d1、upstash | localstorage                                                                                                               |
 | REDIS_URL                   | redis 连接 url，若 NEXT_PUBLIC_STORAGE_TYPE 为 redis 则必填 | 连接 url                         | 空                                                                                                                         |
-| UPSTASH_URL                 | upstash redis 连接 url                                      | 连接 url                         | 空                                                                                                                         |
-| UPSTASH_TOKEN               | upstash redis 连接 token                                    | 连接 token                       | 空                                                                                                                         |
+| UPSTASH_URL                 | upstash redis 连接 url（REST API）                          | 连接 url                         | 空                                                                                                                         |
+| UPSTASH_TOKEN               | upstash redis 连接 token（REST API）                        | 连接 token                       | 空                                                                                                                         |
 | NEXT_PUBLIC_ENABLE_REGISTER | 是否开放注册，仅在非 localstorage 部署时生效                | true / false                     | false                                                                                                                      |
 | NEXT_PUBLIC_SEARCH_MAX_PAGE | 搜索接口可拉取的最大页数                                    | 1-50                             | 5                                                                                                                          |
 | NEXT_PUBLIC_IMAGE_PROXY     | 默认的浏览器端图片代理                                      | url prefix                       | (空)                                                                                                                       |
